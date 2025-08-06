@@ -40,7 +40,7 @@ void test_constructors() {
     }
     
     // Test exception for differing row lengths
-    try {
+    try {   
         Matrix m6 = {{1, 2}, {3, 4, 5}};
         assert(false); // Should not reach here
     } catch (const std::invalid_argument&) {

@@ -6,11 +6,18 @@
 #include <cassert>
 #include <initializer_list>
 #include <iomanip>
+#include <thread>
+#include <algorithm>
+#include <future>
 
 class Matrix {
 private:
     std::vector<double> data; // row-major order
     int rows, cols;
+    
+    // Thread optimization settings
+    static constexpr int MIN_SIZE_FOR_THREADING = 64;  // Minimum matrix size to use threading
+    static const unsigned int MAX_THREADS;             // Will be set to hardware concurrency
 
 public:
     // Constructors
@@ -36,4 +43,12 @@ public:
     // Print
     void print() const;
     friend std::ostream& operator<<(std::ostream& os, const Matrix& mat);
+
+private:
+    // Helper functions for threaded operations
+    void addSubtractRange(const Matrix& other, std::vector<double>& result, 
+                         int start_idx, int end_idx, bool is_addition) const;
+    void multiplyRowRange(const Matrix& other, std::vector<double>& result, 
+                         int start_row, int end_row) const;
+    void transposeRange(std::vector<double>& result, int start_row, int end_row) const;
 };
